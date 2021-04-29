@@ -6,18 +6,27 @@
 #    By: busshi <aldubar@student.42.fr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by busshi            #+#    #+#              #
-#    Updated: 2021/04/30 00:13:36 by busshi           ###   ########.fr        #
+#    Updated: 2021/04/30 00:07:22 by busshi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM	alpine:3.13.4
 
-RUN	apk add --no-cache php php-fpm 
+RUN	apk add --no-cache mariadb  mariadb-client
 
-RUN	wget http://fr.wordpress.org/latest-fr_FR.tar.gz && tar -xf latest-fr_FR.tar.gz && rm -f latest-fr_FR.tar.gz
+COPY	conf/ /home/mysql
 
-COPY	conf/ root/
+RUN	chown -R mysql:mysql /home/mysql && \
+	mkdir -p /run/mysqld && \
+	mkdir -p /var/lib/mysql && \
+	chown -R mysql:mysql /run/mysqld && \
+	chown -R mysql:mysql /var/lib/mysql && \
+	mariadb-install-db --user=mysql --datadir='/var/lib/mysql'
 
-WORKDIR		/root
+WORKDIR	/home/mysql
 
-ENTRYPOINT	["sh", "entry_point.sh"]
+EXPOSE 3306
+
+USER mysql
+
+ENTRYPOINT ["sh", "entry_point.sh"]

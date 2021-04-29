@@ -6,13 +6,13 @@
 #    By: busshi <aldubar@student.42.fr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by busshi            #+#    #+#              #
-#    Updated: 2021/04/29 17:06:35 by busshi           ###   ########.fr        #
+#    Updated: 2021/04/29 23:00:09 by busshi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 YAML	= srcs/docker-compose.yaml
 
-CMD	= docker-compose -f $(YAML)
+CMD	= docker compose -f $(YAML)
 
 
 up:
@@ -36,8 +36,7 @@ clean:
 	@$(CMD) down
 
 fclean: clean
-	@img=$(docker image ls -q)
-	@if [ -n "${img}" ]; then docker rmi -f $(img) --force; fi
+	@docker rmi -f $$(docker image ls -q) --force
 
 re:	fclean up
 
