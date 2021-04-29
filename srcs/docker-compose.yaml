@@ -4,7 +4,7 @@ services:
   mariadb:
     build: requirements/mariadb/
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/inception/mysql
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -19,7 +19,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - wp_data:/var/lib/wordpress
+      - wp_data:/inception/wordpress
     restart: always
     environment:
       - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
