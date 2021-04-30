@@ -9,6 +9,11 @@ OK="[ ${green}OK${clear} ]"
 KO="[ ${red}KO${clear} ]"
 
 
+keep_alive()
+{
+killall mariadbd
+mariadbd
+}
 
 
 echo -e "${orange}[+] Starting mariadb demon...${clear}"
@@ -19,15 +24,13 @@ mariadbd &
 sleep 10
 
 echo -e "${orange}[+] Checking mariadb configuration...${clear}"
-file="/inception/mysql/config.txt"
+file="/var/lib/mysql/config.txt"
 [ -f "$file" ] && check_config=$( cat "$file" )
-[ "$check_config" = "done" ] && { echo -e "${OK} Config already done. Skipping..."; exit 0; } || echo -e "Need to create database..."
+[ "$check_config" = "done" ] && { echo -e "${OK} Config already done. Skipping..."; keep_alive; } || echo -e "Need to create database..."
 
 
 echo -e "${orange}[+] Creating database...${clear}"
 mariadb -e "$(eval "echo \"$(cat create_db.sql)\"")"
-[[ $? -eq 0 ]] && { echo -e "${OK}"; echo "done" > "$file"; } || { echo -e "${KO}"; echo "failed" > "$file"; }
-
-
+[[ $? -eq 0 ]] && { echo -e "${OK}"; echo "done" > "$file"; keep_alive; } || { echo -e "${KO}"; echo "failed" > "$file"; }
 
 

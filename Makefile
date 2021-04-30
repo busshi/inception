@@ -6,13 +6,13 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/04/30 13:59:10 by aldubar          ###   ########.fr        #
+#    Updated: 2021/04/30 15:33:39 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 YAML		= srcs/docker-compose.yaml
 
-CMD		= docker-compose -f $(YAML)
+CMD		= cd srcs && docker-compose
 
 
 all:	build up
@@ -46,7 +46,7 @@ prune:	clean
 	@docker rmi $$(docker image ls -q) --force
 	@docker volume prune
 
-re:	fclean up
+re:	fclean all
 
 help:
 	@echo "Usage: make [up | start | stop | status | restart | logs | clean | fclean | help]"

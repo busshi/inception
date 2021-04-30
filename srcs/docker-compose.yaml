@@ -4,14 +4,13 @@ services:
   mariadb:
     build: requirements/mariadb/
     volumes:
-      - db_data:/inception/mysql
-    restart: always
+      - db_data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-    
+    restart: always
   wordpress:
     build: requirements/wordpress/
     depends_on:
@@ -19,13 +18,13 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - wp_data:/inception/wordpress
-    restart: always
+      - wp_data:/var/www/localhost/wordpress
     environment:
       - WORDPRESS_DB_HOST=${WORDPRESS_DB_HOST}
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_DB_PASSWORD=${WORDPRESS_DB_PASSWORD}
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+    restart: always
 volumes:
   db_data: {}
   wp_data: {}

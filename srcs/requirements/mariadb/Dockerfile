@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by aldubar           #+#    #+#              #
-#    Updated: 2021/04/30 13:57:04 by aldubar          ###   ########.fr        #
+#    Updated: 2021/04/30 14:57:45 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,10 +17,8 @@ RUN	apk add --no-cache mariadb  mariadb-client
 COPY	conf/ /home/mysql
 
 RUN	chown -R mysql:mysql /home/mysql && \
-	mkdir -p /run/mysqld && \
-	mkdir -p /var/lib/mysql && \
-	chown -R mysql:mysql /run/mysqld && \
-	chown -R mysql:mysql /var/lib/mysql && \
+	mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld && \
+	mkdir -p /var/lib/mysql && chown -R mysql:mysql /var/lib/mysql && \
 	mariadb-install-db --user=mysql --datadir='/var/lib/mysql'
 
 WORKDIR	/home/mysql
