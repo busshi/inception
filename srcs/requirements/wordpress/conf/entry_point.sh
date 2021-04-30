@@ -12,7 +12,7 @@ KO="[ ${red}KO${clear} ]"
 echo -e "${orange}[+] Checking wordpress config${clear}"
 file="/inception/wordpress/config.txt"
 [ -f "$file" ] && check_config=$( cat "$file" )
-[ "$check_config" = "done" ] && { echo -e "${OK}Config already done! Skipping..."; exit 0; } || echo "Need to configure wordpress..."
+[ "$check_config" = "done" ] && { echo -e "${OK} Config already done! Skipping..."; exit 0; } || echo "Need to configure wordpress..."
 
 
 echo -e "${orange}[+] Configuring wordpress${clear}"

@@ -18,17 +18,16 @@ mariadbd &
 
 sleep 10
 
-echo -e "${orange}[+] Checking configuration...${clear}"
+echo -e "${orange}[+] Checking mariadb configuration...${clear}"
 file="/inception/mysql/config.txt"
 [ -f "$file" ] && check_config=$( cat "$file" )
 [ "$check_config" = "done" ] && { echo -e "${OK} Config already done. Skipping..."; exit 0; } || echo -e "Need to create database..."
 
 
 echo -e "${orange}[+] Creating database...${clear}"
-mysql -u mysql < create_db.sql
+mariadb -e "$(eval "echo \"$(cat create_db.sql)\"")"
 [[ $? -eq 0 ]] && { echo -e "${OK}"; echo "done" > "$file"; } || { echo -e "${KO}"; echo "failed" > "$file"; }
 
 
 
 
-/bin/sh

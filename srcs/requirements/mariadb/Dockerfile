@@ -6,7 +6,7 @@
 #    By: busshi <aldubar@student.42.fr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by busshi            #+#    #+#              #
-#    Updated: 2021/04/30 00:07:22 by busshi           ###   ########.fr        #
+#    Updated: 2021/04/30 11:19:09 by busshi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,8 +25,8 @@ RUN	chown -R mysql:mysql /home/mysql && \
 
 WORKDIR	/home/mysql
 
-EXPOSE 3306
+USER	mysql
 
-USER mysql
+EXPOSE	3306
 
 ENTRYPOINT ["sh", "entry_point.sh"]

@@ -6,13 +6,14 @@
 #    By: busshi <aldubar@student.42.fr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by busshi            #+#    #+#              #
-#    Updated: 2021/04/30 01:15:24 by busshi           ###   ########.fr        #
+#    Updated: 2021/04/30 11:32:28 by busshi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-YAML	= srcs/docker-compose.yaml
+YAML		= srcs/docker-compose.yaml
 
-CMD	= docker-compose -f $(YAML)
+CMD		= docker-compose -f $(YAML)
+
 
 up:
 	@$(CMD) up
@@ -35,7 +36,6 @@ clean:
 	@$(CMD) down
 
 fclean: clean
-	@docker rmi $$(docker image ls -q) --force
 
 prune:	clean
 	@docker rmi $$(docker image ls -q) --force
