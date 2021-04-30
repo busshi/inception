@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: busshi <aldubar@student.42.fr>             +#+  +:+       +#+         #
+#    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/04/29 13:58:41 by busshi            #+#    #+#              #
-#    Updated: 2021/04/30 11:32:28 by busshi           ###   ########.fr        #
+#    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
+#    Updated: 2021/04/30 13:59:10 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,16 @@ YAML		= srcs/docker-compose.yaml
 CMD		= docker-compose -f $(YAML)
 
 
+all:	build up
+
+build:
+	@$(CMD) build
+
 up:
 	@$(CMD) up
 
 start:
-	@$(CMD) up -d
+	@$(CMD) start
 
 stop:
 	@$(CMD) stop
@@ -46,4 +51,4 @@ re:	fclean up
 help:
 	@echo "Usage: make [up | start | stop | status | restart | logs | clean | fclean | help]"
 
-.PHONY: up, start, stop, status, restart, logs, clean, fclean, help
+.PHONY: all, build, up, start, stop, status, restart, logs, clean, fclean, help
