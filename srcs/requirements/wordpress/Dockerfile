@@ -6,22 +6,24 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by aldubar           #+#    #+#              #
-#    Updated: 2021/04/30 17:19:47 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/01 00:24:04 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM	alpine:3.13.4
+FROM		alpine:3.13.4
 
-RUN	apk add --no-cache php php-fpm 
+RUN		apk add --no-cache php7 php7-fpm php7-phar php7-json php7-curl php7-mysqli mariadb-client php7-iconv
 
-RUN	mkdir -p /home/aldubar/data && cd /home/aldubar/data && \
-	wget -O wordpress.tar.gz https://fr.wordpress.org/wordpress-5.7.1-fr_FR.tar.gz && \
-	tar -xf wordpress.tar.gz && \
-	rm -f wordpress.tar.gz
+RUN		mkdir -p /home/aldubar/data/wordpress && cd /home/aldubar/data/wordpress && \
+		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+		chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp && \
+		wp core download --locale=fr_FR
 
 
-COPY	conf/ /root
+COPY		conf/ /home/aldubar/data/wordpress
 
-WORKDIR		/root
+WORKDIR		/home/aldubar/data/wordpress
+
+EXPOSE		9000
 
 ENTRYPOINT	["sh", "entry_point.sh"]

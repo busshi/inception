@@ -24,7 +24,7 @@ start_daemon
 }
 
 
-echo -e "${orange}[+] Starting mariadb demon...${clear}"
+echo -e "${orange}[+] Starting mariadb...${clear}"
 start_daemon &
 [[ $? -eq 0 ]] && echo -e "${OK}" || echo -e "${KO}"
 
@@ -37,7 +37,8 @@ file="/home/aldubar/data/mariadb/config.txt"
 [ "$check_config" = "done" ] && { echo -e "${OK} Config already done. Skipping..."; keep_alive; } || echo -e "Need to create database..."
 
 
-echo -e "${orange}[+] Creating database...${clear}"
+
+echo -e "${orange}[+] Creating mariadb database...${clear}"
 cd /home/mysql; mariadb -e "$(eval "echo \"$(cat create_db.sql)\"")"
 [[ $? -eq 0 ]] && { echo -e "${OK}"; echo "done" > "$file"; keep_alive; } || { echo -e "${KO}"; echo "failed" > "$file"; }
 
