@@ -4,13 +4,13 @@ services:
   mariadb:
     build: requirements/mariadb/
     volumes:
-      - db_data:/home/aldubar/data/mariadb
+      - db_data:${MARIADB_VOLUME_PATH}
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - VOLUME_PATH=${VOLUME_PATH}
+      - MARIADB_VOLUME_PATH=${MARIADB_VOLUME_PATH}
     restart: always
   wordpress:
     build: requirements/wordpress/
@@ -19,7 +19,7 @@ services:
     ports:
       - "8000:80"
     volumes:
-      - wp_data:/home/aldubar/data/wordpress
+      - wp_data:${WORDPRESS_VOLUME_PATH}
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
@@ -30,8 +30,19 @@ services:
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_DB_USER_PASSWORD=${WORDPRESS_DB_USER_PASSWORD}
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
-      - VOLUME_PATH=${VOLUME_PATH}
+      - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
+      - DOMAIN_URM=${DOMAIN_URL}
     restart: always
 volumes:
-  db_data: {}
-  wp_data: {}
+  db_data: 
+    driver: local
+    driver_opts:
+      type: none
+      device: ${MARIADB_VOLUME_PATH}
+      o: bind
+  wp_data: 
+    driver: local
+    driver_opts:
+      type: none
+      device: ${WORDPRESS_VOLUME_PATH}
+      o: bind

@@ -6,19 +6,25 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/04/30 20:09:08 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/01 16:45:34 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+include srcs/.env
+
 CMD	= cd srcs && docker-compose
 
-all:	build up
+$(MARIADB_VOLUME):
+	mkdir -p $(VOLUME_PATH)/mariadb
 
-build:
-	@$(CMD) build
+$(WORDPRESS_VOLUME):
+	mkdir -p $(VOLUME_PATH)/wordpress
 
-up:
+all:	build
+
+build:	$(MARIADB_VOLUME) $(WORDPRESS_VOLUME)
 	@$(CMD) up
+	@touch build
 
 start:
 	@$(CMD) start
@@ -36,16 +42,18 @@ logs:
 
 clean:
 	@$(CMD) down
+	@rm -f build
 
 fclean: clean
+	@$(CMD) down -v
 
-prune:	clean
+prune:	fclean
 	@docker rmi $$(docker image ls -q) --force
 	@docker volume prune
 
-re:	prune all
+re:	fclean all
 
 help:
-	@echo "Usage: make [up | start | stop | status | restart | logs | clean | fclean | help]"
+	@echo "Usage: make [build | start | stop | status | restart | logs | clean | fclean | help]"
 
 .PHONY: all, build, up, start, stop, status, restart, logs, clean, fclean, help

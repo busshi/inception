@@ -6,11 +6,11 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/01 00:43:05 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/01 14:23:34 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM	alpine:3.13.4
+FROM alpine:3.13.4
 
 RUN	apk add --no-cache mariadb  mariadb-client
 
