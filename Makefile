@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/01 17:00:05 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/01 17:08:16 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,19 +14,17 @@ include srcs/.env
 
 CMD			= cd srcs && docker-compose
 
-$(MARIADB_VOLUME):
-			mkdir -p $(VOLUME_PATH)/mariadb
-
-$(WORDPRESS_VOLUME):
-			mkdir -p $(VOLUME_PATH)/wordpress
+$(VOLUMES):
+			mkdir -p $(MARIADB_VOLUME_PATH) \
+			mkdir -p $(WORDPRESS_VOLUME_PATH)
 
 all:		build
 
-build:		$(MARIADB_VOLUME) $(WORDPRESS_VOLUME)
+build:		$(VOLUMES)
 			@$(CMD) up -d
 			@touch build
 
-verbose:	$(MARIADB_VOLUME) $(WORDPRESS_VOLUME)
+verbose:	$(VOLUMES)
 			@$(CMD) up
 			@touch build
 
