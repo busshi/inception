@@ -20,6 +20,7 @@ keep_alive()
 {
 killall mariadbd
 sleep 5
+echo -e "${orange}[+] Restarting mariadb...${clear}"
 start_daemon
 }
 
@@ -32,14 +33,14 @@ start_daemon &
 sleep 10
 
 echo -e "${orange}[+] Checking mariadb configuration...${clear}"
-file="/home/aldubar/data/mariadb/config.txt"
-[ -f "$file" ] && check_config=$( cat "$file" )
-[ "$check_config" = "done" ] && { echo -e "${OK} Config already done. Skipping..."; keep_alive; } || echo -e "Need to create database..."
 
-
-
-echo -e "${orange}[+] Creating mariadb database...${clear}"
-cd /home/mysql; mariadb -e "$(eval "echo \"$(cat create_db.sql)\"")"
-[[ $? -eq 0 ]] && { echo -e "${OK}"; echo "done" > "$file"; keep_alive; } || { echo -e "${KO}"; echo "failed" > "$file"; }
-
+check=$( mariadb -e "SHOW DATABASES" | grep ${MYSQL_DATABASE} | wc -l )
+if [[ $check -eq 1 ]] ; then
+	echo -e "${OK}"
+	keep_alive
+else
+	echo -e "${orange}[+] Creating mariadb database...${clear}"
+	cd /home/mysql; mariadb -e "$(eval "echo \"$(cat create_db.sql)\"")"
+	[[ $? -eq 0 ]] && { echo -e "${OK}"; keep_alive; } || { echo -e "${KO}"; exit 1; }
+fi
 

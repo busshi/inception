@@ -10,7 +10,6 @@ KO="[ ${red}KO${clear} ]"
 
 DIR=${WORDPRESS_VOLUME_PATH}
 
-error=0
 
 keep_alive()
 {
@@ -28,18 +27,10 @@ php-fpm7 -F
 }
 
 
-config_fail()
-{
-echo -e "${KO} Config failed"
-echo "failed" > ${file}
-error=$(( $error + 1 ))
-exit 1
-}
-
 
 check()
 {
-[[ $? -eq 0 ]] && echo -e "$OK" || config_fail
+[[ $? -eq 0 ]] && echo -e "$OK" || { echo -e "${KO} Config failed!"; } #exit 1; }
 }
 
 
@@ -55,43 +46,57 @@ while [[ $connected -eq 0 ]] ; do
 done
 
 
-echo -e "${orange}[+] Checking wordpress config...${clear}"
-file="${DIR}/config.txt"
-[ -f "$file" ] && check_config=$( cat "$file" )
-[ "$check_config" = "done" ] && { echo -e "${OK} Config already done! Skipping..."; keep_alive; } || echo "Need to configure wordpress..."
-
 
 echo -e "${orange}[+] Configuring wordpress...${clear}"
-wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${WORDPRESS_DB_HOST}
-check
+if [ ! -f "${DIR}/wp-config.php" ] ; then
+	wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${WORDPRESS_DB_HOST}
+	check
+else
+	echo -e "${OK} File wp-config.php already generated. Skipping."
+fi
 
 
 echo -e "${orange}[+] Creating administrator ${WORDPRESS_DB_ADMIN} and a sample wordpress site${clear}"
-wp core install --url="${DOMAIN_URL}" --title="Random Blog 42" --admin_user=${WORDPRESS_DB_ADMIN} --admin_password=${WORDPRESS_DB_ADMIN_PASSWORD} --admin_email="${WORDPRESS_DB_ADMIN}@42.fr"
-check
-
-
-#echo -e "${orange}[+] Giving admin super-admin privileges${clear}"
-#wp super-admin add "${WORDPRESS_DB_ADMIN}"
-#check
+if ! wp core is-installed ; then
+	wp core install --url="${DOMAIN_URL}" --title="Random Blog 42" --admin_user=${WORDPRESS_DB_ADMIN} --admin_password=${WORDPRESS_DB_ADMIN_PASSWORD} --admin_email="${WORDPRESS_DB_ADMIN}@42.fr" --skip-email
+	check
+else
+	echo -e "${OK} Wordpress already installed. Skipping."
+fi
 
 
 echo -e "${orange}[+] Creating wordpress user: ${WORDPRESS_DB_USER}...${clear}"
-wp user create ${WORDPRESS_DB_USER} "${WORDPRESS_DB_USER}@student.42.fr" --user_pass=${WORDPRESS_DB_USER_PASSWORD} --role=editor
-check
+if [[ $(wp user list --field=user_login | grep ${WORDPRESS_DB_USER} | wc -l) -eq 0 ]]; then
+	wp user create ${WORDPRESS_DB_USER} "${WORDPRESS_DB_USER}@student.42.fr" --user_pass=${WORDPRESS_DB_USER_PASSWORD} --role=editor
+	check
+else
+	echo -e "${OK} User ${WORDPRESS_DB_USER} already exists. Skipping."
+fi
+
 
 echo -e "${orange}[+] Cleaning sample post...${clear}"
-wp post delete 1 --force
-check
+if wp post exists 1 &> /dev/null ; then
+	wp post delete 1 --force
+	check;
+else
+	echo -e "${OK} Post already deleted. Skipping..."
+fi
 
 
 echo -e "${orange}[+] Generating some random posts...${clear}"
-wp post create --post_type=post --post_name='1st_post' --post_title='Un post inutile...' --post_content='Voici un post inutile pour tester la base de données...' --post_author=2 --post_status=publish
-check
-wp post create --post_type=post --post_name='2nd_post' --post_title='Un post très inutile !' --post_content='Voilà un post encore plus inutile !' --post_author=2 --post_status=publish
-check
+if ! wp post exists 4 &> /dev/null ; then
+	wp post create --post_type=post --post_name='1st_post' --post_title='Un post inutile...' --post_content='Voici un post inutile pour tester la base de données...' --post_author=2 --post_status=publish
+	check
+else
+	echo -e "${OK} 1st post already published. Skipping."
+fi
 
-[[ $error -eq 0 ]] && echo "done" > $file
+if ! wp post exists 5 &> /dev/null ; then
+	wp post create --post_type=post --post_name='2nd_post' --post_title='Un post très inutile !' --post_content='Voilà un post encore plus inutile !' --post_author=2 --post_status=publish
+	check
+else
+	echo -e "${OK} 2nd post already published. Skipping."
+fi
 
 
 keep_alive

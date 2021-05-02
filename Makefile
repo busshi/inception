@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/01 17:08:16 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/02 18:10:13 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,18 +14,16 @@ include srcs/.env
 
 CMD			= cd srcs && docker-compose
 
-$(VOLUMES):
-			mkdir -p $(MARIADB_VOLUME_PATH) \
-			mkdir -p $(WORDPRESS_VOLUME_PATH)
-
 all:		build
 
-build:		$(VOLUMES)
-			@$(CMD) up -d
+build:
+			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
+			@$(CMD) up --build -d
 			@touch build
 
-verbose:	$(VOLUMES)
-			@$(CMD) up
+verbose:
+			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
+			@$(CMD) up --build
 			@touch build
 
 start:
@@ -50,13 +48,15 @@ fclean:		clean
 			@$(CMD) down -v
 
 prune:		fclean
+			@docker volume prune --force
+			@sudo rm -rf $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
+
+rmi:		prune
 			@docker rmi $$(docker image ls -q) --force
-			@docker volume prune
 
 re:		fclean all
 
 help:
-			@echo "Usage: make [build | start | stop | status \
-			| restart | logs | clean | fclean | help]"
+			@echo "Usage: make [build | start | stop | status | restart | logs | clean | fclean | help]"
 
 .PHONY: all, build, up, start, stop, status, restart, logs, clean, fclean, help
