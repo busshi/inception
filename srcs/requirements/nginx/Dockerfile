@@ -6,18 +6,20 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 14:01:35 by aldubar           #+#    #+#              #
-#    Updated: 2021/04/30 13:57:26 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/02 22:23:00 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM alpine:3.13.4
+FROM		alpine:3.13.4
 
-RUN apk add --no-cache nginx openssl
+RUN		apk add --no-cache nginx openssl
 
-COPY conf/ ./root/
+RUN		mkdir -p /home/aldubar/nginx
 
-WORKDIR /root/
+COPY		conf/ /home/aldubar/nginx/
 
-EXPOSE 443
+WORKDIR		/home/aldubar/nginx
 
-ENTRYPOINT ["sh", "entry_point.sh"]
+EXPOSE		443
+	
+ENTRYPOINT 	["sh", "entry_point.sh"]

@@ -30,7 +30,7 @@ php-fpm7 -F
 
 check()
 {
-[[ $? -eq 0 ]] && echo -e "$OK" || { echo -e "${KO} Config failed!"; } #exit 1; }
+[[ $? -eq 0 ]] && echo -e "$OK" || echo -e "$KO"
 }
 
 

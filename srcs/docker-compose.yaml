@@ -33,6 +33,20 @@ services:
       - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
       - DOMAIN_URM=${DOMAIN_URL}
     restart: always
+  nginx:
+    build: requirements/nginx/
+    depends_on:
+      - wordpress
+    ports:
+      - "443:443"
+    volumes:
+      - wp_data:${WORDPRESS_VOLUME_PATH}
+    environment:
+      - CERT_PATH=${CERT_PATH}
+      - NGINX_CERT=${NGINX_CERT}
+      - NGINX_CERT_KEY=${NGINX_CERT_KEY}
+      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+    restart: always
 volumes:
   db_data: 
     driver: local

@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/02 18:10:13 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/02 21:31:47 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ prune:		fclean
 			@sudo rm -rf $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
 
 rmi:		prune
-			@docker rmi $$(docker image ls -q) --force
+			@if [ $$(docker image ls -q | wc -l) -ge 1 ]; then docker rmi $$(docker image ls -q) --force; fi
 
 re:		fclean all
 
