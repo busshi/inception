@@ -16,9 +16,9 @@ check()
 
 
 echo -e "${orange}[+] Generating self certificat for nginx...${clear}"
-if [ ! -f "$NGINX_CERT" ] ; then
+if [ ! -f "${NGINX_CERT}" -a ! -f "${NGINX_CERT_KEY}" ] ; then
 	mkdir -p ${CERT_PATH}
-	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${WORDPRESS_DB_USER}" -newkey rsa:2048 -keyout ${NGINX_CERT_KEY} -out ${NGINX_CERT}
+	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${WORDPRESS_DB_USER}" -newkey rsa:3072 -keyout ${NGINX_CERT_KEY} -out ${NGINX_CERT}
 	check
 else
 	echo -e "${OK} Certificat already generated. Skipping."

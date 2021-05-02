@@ -22,7 +22,7 @@ wp post list
 echo -e "${orange}[+] Wordpress info:${clear}"
 wp --info
 
-echo -e "${orange}[+] Starting php-fpm${clear}"
+echo -e "${orange}[+] Starting php-fpm...${clear}"
 php-fpm7 -F
 }
 
@@ -58,7 +58,10 @@ fi
 
 echo -e "${orange}[+] Creating administrator ${WORDPRESS_DB_ADMIN} and a sample wordpress site${clear}"
 if ! wp core is-installed ; then
-	wp core install --url="${DOMAIN_URL}" --title="Random Blog 42" --admin_user=${WORDPRESS_DB_ADMIN} --admin_password=${WORDPRESS_DB_ADMIN_PASSWORD} --admin_email="${WORDPRESS_DB_ADMIN}@42.fr" --skip-email
+	wp core install --url=localhost --title="Random Blog 42" --admin_user=${WORDPRESS_DB_ADMIN} --admin_password=${WORDPRESS_DB_ADMIN_PASSWORD} --admin_email="${WORDPRESS_DB_ADMIN}@42.fr" --skip-email
+	check
+	echo -e "${orange}[+] Aplying a theme...${clear}"
+	wp theme install twentysixteen --activate
 	check
 else
 	echo -e "${OK} Wordpress already installed. Skipping."

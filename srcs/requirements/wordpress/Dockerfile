@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/01 00:24:04 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/03 01:10:05 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,9 @@ RUN		mkdir -p /home/aldubar/data/wordpress && cd /home/aldubar/data/wordpress &&
 		chmod +x wp-cli.phar && mv wp-cli.phar /usr/bin/wp && \
 		wp core download --locale=fr_FR
 
+COPY		conf/www.conf /etc/php7/php-fpm.d/
 
-COPY		conf/ /home/aldubar/data/wordpress
+COPY		conf/entry_point.sh /home/aldubar/data/wordpress/
 
 WORKDIR		/home/aldubar/data/wordpress
 
