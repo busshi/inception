@@ -27,7 +27,7 @@ fi
 
 echo -e "${orange}[+] Copying nginx configuration file...${clear}"
 if [ -f default.conf ] ; then
-	cp default.conf /etc/nginx/http.d/
+	mv default.conf /etc/nginx/http.d/
 	check
 else
 	echo -e "${OK} Nginx already config. Skipping."
