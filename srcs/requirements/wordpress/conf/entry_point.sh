@@ -52,15 +52,47 @@ echo -e "${orange}[+] Configuring wordpress...${clear}"
 if [ ! -f "${DIR}/wp-config.php" ] ; then
 	wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${WORDPRESS_DB_HOST}
 	check
-	echo "define('WP_CACHE', true);" >> "${DIR}/wp-config.php"
+#	wp plugin install --activate redis-cache
+#	check
+#	wp redis enable
+#	check
+#	echo "define('WP_CACHE', true);" >> "${DIR}/wp-config.php"
+#	cat redis.conf >> "${DIR}/wp-config.php"
 else
 	echo -e "${OK} File wp-config.php already generated. Skipping."
 fi
+
+#echo -e "${orange}[+] Installing redis plugin for wordpress...${clear}"
+#if ! wp plugin is-installed redis-cache ; then
+ #       wp plugin install --activate redis-cache
+  #      check
+#else
+ #       echo -e "${OK} Redis-cache plugin already installed. Skipping."
+#fi
+
+
+#echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
+#wp redis enable
+#check
 
 
 echo -e "${orange}[+] Creating administrator ${WORDPRESS_DB_ADMIN} and a sample wordpress site${clear}"
 if ! wp core is-installed ; then
 	wp core install --url=${DOMAIN_URL} --title="Random Blog 42" --admin_user=${WORDPRESS_DB_ADMIN} --admin_password=${WORDPRESS_DB_ADMIN_PASSWORD} --admin_email="${WORDPRESS_DB_ADMIN}@42.fr" --skip-email
+	check
+        wp plugin install --activate redis-cache
+        check
+#	wp plugin update --all
+	check
+        #wp redis enable
+        #check
+        echo "define( 'WP_CACHE', true );" >> "${DIR}/wp-config.php"
+	echo "define( 'WP_REDIS_HOST', getenv('REDIS') );" >> "${DIR}/wp-config.php"
+	echo "define( 'WP_REDIS_PORT', getenv('REDIS_PORT') );" >> "${DIR}/wp-config.php"
+	echo "define( 'WP_REDIS_TIMEOUT', 1 );" >> "${DIR}/wp-config.php"
+	echo "define( 'WP_REDIS_READ_TIMEOUT', 1 );" >> "${DIR}/wp-config.php"
+	echo "define( 'WP_REDIS_DATABASE', 0 );" >> "${DIR}/wp-config.php"
+	wp redis enable
 	check
 	echo -e "${orange}[+] Aplying a theme...${clear}"
 	wp theme install twentysixteen --activate
@@ -115,18 +147,18 @@ else
 fi
 
 
-echo -e "${orange}[+] Installing redis plugin for wordpress...${clear}"
-if ! wp plugin is-installed redis-cache ; then
-	wp plugin install --activate redis-cache
-	check
-else
-	echo -e "${OK} Redis-cache plugin already installed. Skipping."
-fi
+#echo -e "${orange}[+] Installing redis plugin for wordpress...${clear}"
+#if ! wp plugin is-installed redis-cache ; then
+#	wp plugin install --activate redis-cache
+#	check
+#else
+#	echo -e "${OK} Redis-cache plugin already installed. Skipping."
+#fi
 
 
-echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
-wp redis enable
-check
+#echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
+#wp redis enable
+#check
 
 
 keep_alive

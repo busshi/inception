@@ -21,6 +21,7 @@ file="/etc/redis.conf"
 if [ $(cat "$file" | grep "maxmemory 256mb" | wc -l) -eq 0 ]; then
 	echo "maxmemory 256mb" >> "$file"
 	echo "maxmemory-policy allkeys-lru" >> "$file"
+	sed -i "s/protected-mode yes/protected-mode no/g" "$file"
 	check
 else
 	echo -e "${OK} Redis already configured. Skipping."
@@ -28,16 +29,17 @@ fi
 
 
 echo -e "${orange}[+] Starting redis server...${clear}"
-redis-server --daemonize yes
+redis-server --daemonize yes --protected-mode no
 check
 
 
 echo -e "${orange}[+] Connecting to redis cache...${clear}"
-while [ "$(redis-cli ping &> /dev/null)" != "PONG" ] ; do
-	sleep 1
-done
-echo -e "${OK}"
+#while [ "$(redis-cli ping &> /dev/null)" != "PONG" ] ; do
+#	sleep 1
+#done
+#echo -e "${OK}"
 
+sleep 5
 
 echo -e "${orange}[+] Starting redis monitor...${clear}"
 redis-cli monitor

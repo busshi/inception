@@ -35,6 +35,8 @@ services:
       - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
       - WORDPRESS_PORT=${WORDPRESS_PORT}
+      - REDIS=${REDIS}
+      - REDIS_PORT=${REDIS_PORT}
     restart: always
   nginx:
     build: requirements/nginx/
