@@ -16,7 +16,7 @@ check()
 
 
 echo -e "${orange}[+] Generating self certificat for nginx...${clear}"
-if [ ! -f "${NGINX_CERT}" -a ! -f "${NGINX_CERT_KEY}" ] ; then
+if [ ! -f "${NGINX_CERT}" -o ! -f "${NGINX_CERT_KEY}" ] ; then
 	mkdir -p ${CERT_PATH}
 	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${WORDPRESS_DB_USER}" -newkey rsa:3072 -keyout ${NGINX_CERT_KEY} -out ${NGINX_CERT}
 	check
@@ -26,15 +26,21 @@ fi
 
 
 echo -e "${orange}[+] Copying nginx configuration file...${clear}"
-if [ -f default.conf ] ; then
-	mv default.conf /etc/nginx/http.d/
+config="default.conf"
+if [ -f "$config" ] ; then
+	sed -i "s/DOMAIN_URL/${DOMAIN_URL}/g" "$config"
+	path=$(echo ${WORDPRESS_VOLUME_PATH} | sed 's_/_\\/_g')
+	sed -i "s/WORDPRESS_VOLUME_PATH/${path}/g" "$config"
+	sed -i "s/WORDPRESS_DB_NAME/${WORDPRESS_DB_NAME}/g" "$config"
+	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/g" "$config"
+	mv "$config" /etc/nginx/http.d/
 	check
 else
-	echo -e "${OK} Nginx already config. Skipping."
+	echo -e "${OK} Nginx config file already copied. Skipping."
 fi
 
 
-echo -e "${orange}[+] Checking nginx configuration${clear}"
+echo -e "${orange}[+] Checking nginx configuration...${clear}"
 nginx -t
 check
 

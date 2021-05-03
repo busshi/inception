@@ -11,6 +11,7 @@ KO="[ ${red}KO${clear} ]"
 DIR=${WORDPRESS_VOLUME_PATH}
 
 
+
 keep_alive()
 {
 echo -e "${orange}[+] Listing users:${clear}"
@@ -51,6 +52,7 @@ echo -e "${orange}[+] Configuring wordpress...${clear}"
 if [ ! -f "${DIR}/wp-config.php" ] ; then
 	wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${WORDPRESS_DB_HOST}
 	check
+	echo "define('WP_CACHE', true);" >> "${DIR}/wp-config.php"
 else
 	echo -e "${OK} File wp-config.php already generated. Skipping."
 fi
@@ -100,6 +102,31 @@ if ! wp post exists 5 &> /dev/null ; then
 else
 	echo -e "${OK} 2nd post already published. Skipping."
 fi
+
+
+echo -e "${orange}[+] Checking config file www.conf${clear}"
+file="www.conf"
+if [ -f "$file" ] ; then
+	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
+	mv "$file" /etc/php7/php-fpm.d/
+	check
+else
+	echo -e "${OK} www.conf already copied. Skipping."
+fi
+
+
+echo -e "${orange}[+] Installing redis plugin for wordpress...${clear}"
+if ! wp plugin is-installed redis-cache ; then
+	wp plugin install --activate redis-cache
+	check
+else
+	echo -e "${OK} Redis-cache plugin already installed. Skipping."
+fi
+
+
+echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
+wp redis enable
+check
 
 
 keep_alive

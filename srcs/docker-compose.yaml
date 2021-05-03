@@ -3,6 +3,7 @@ version: "3"
 services:
   mariadb:
     build: requirements/mariadb/
+    image: mariadb
     volumes:
       - db_data:${MARIADB_VOLUME_PATH}
     environment:
@@ -14,6 +15,7 @@ services:
     restart: always
   wordpress:
     build: requirements/wordpress/
+    image: wordpress
     depends_on:
       - mariadb
     ports:
@@ -32,9 +34,11 @@ services:
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
       - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
+      - WORDPRESS_PORT=${WORDPRESS_PORT}
     restart: always
   nginx:
     build: requirements/nginx/
+    image: nginx
     depends_on:
       - wordpress
     ports:
@@ -46,6 +50,18 @@ services:
       - NGINX_CERT=${NGINX_CERT}
       - NGINX_CERT_KEY=${NGINX_CERT_KEY}
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
+      - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
+      - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
+      - WORDPRESS_PORT=${WORDPRESS_PORT}
+      - DOMAIN_URL=${DOMAIN_URL}
+    restart: always
+  redis:
+    build: requirements/bonus/redis/
+    image: redis
+    depends_on:
+      - wordpress
+    volumes:
+      - wp_data:${WORDPRESS_VOLUME_PATH}
     restart: always
 volumes:
   db_data: 
