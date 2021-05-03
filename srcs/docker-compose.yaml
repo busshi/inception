@@ -65,6 +65,16 @@ services:
     volumes:
       - wp_data:${WORDPRESS_VOLUME_PATH}
     restart: always
+  adminer:
+    build: requirements/bonus/adminer/
+    image: adminer
+    depends_on:
+      - wordpress
+    volumes:
+      - wp_data:${WORDPRESS_VOLUME_PATH}
+    environment:
+      - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
+    restart: always
 volumes:
   db_data: 
     driver: local

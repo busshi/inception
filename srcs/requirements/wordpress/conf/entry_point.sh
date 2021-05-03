@@ -65,8 +65,8 @@ if ! wp core is-installed ; then
         wp plugin install --activate redis-cache
         check
         echo "define( 'WP_CACHE', true );" >> "${DIR}/wp-config.php"
-	echo "define( 'WP_REDIS_HOST', ${REDIS_HOST} );" >> "${DIR}/wp-config.php"
-	echo "define( 'WP_REDIS_PORT', ${REDIS_PORT} );" >> "${DIR}/wp-config.php"
+	echo "define( 'WP_REDIS_HOST', getenv('REDIS_HOST') );" >> "${DIR}/wp-config.php"
+	echo "define( 'WP_REDIS_PORT', getenv('REDIS_PORT') );" >> "${DIR}/wp-config.php"
 	echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
 	wp redis enable
 	check

@@ -36,7 +36,7 @@ check
 echo -e "${orange}[+] Connecting to redis...${clear}"
 ping=0
 while [[ $ping -eq 0 ]] ; do
-	[ "$(redis-cli ping)" != "PONG" ] && sleep 1 || ping=$(( $ping + 1 ))
+	[ "$(redis-cli ping 2> /dev/null)" != "PONG" ] && sleep 1 || ping=$(( $ping + 1 ))
 done
 echo -e "${OK}"
 
