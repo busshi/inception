@@ -6,13 +6,14 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/03 14:52:28 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/03 21:56:12 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM		alpine:3.13.4
 
-RUN		apk add --no-cache php7 php7-fpm php7-phar php7-json php7-curl php7-mysqli mariadb-client php7-iconv
+RUN		apk add --no-cache php7 php7-fpm php7-phar php7-json php7-curl \
+		php7-mysqli mariadb-client php7-iconv
 
 RUN		mkdir -p /home/aldubar/data/wordpress && cd /home/aldubar/data/wordpress && \
 		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \

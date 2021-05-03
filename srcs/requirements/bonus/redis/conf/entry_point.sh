@@ -33,13 +33,13 @@ redis-server --daemonize yes --protected-mode no
 check
 
 
-echo -e "${orange}[+] Connecting to redis cache...${clear}"
-#while [ "$(redis-cli ping &> /dev/null)" != "PONG" ] ; do
-#	sleep 1
-#done
-#echo -e "${OK}"
+echo -e "${orange}[+] Connecting to redis...${clear}"
+ping=0
+while [[ $ping -eq 0 ]] ; do
+	[ "$(redis-cli ping)" != "PONG" ] && sleep 1 || ping=$(( $ping + 1 ))
+done
+echo -e "${OK}"
 
-sleep 5
 
 echo -e "${orange}[+] Starting redis monitor...${clear}"
 redis-cli monitor

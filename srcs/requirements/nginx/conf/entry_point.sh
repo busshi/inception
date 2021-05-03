@@ -31,7 +31,7 @@ if [ -f "$config" ] ; then
 	sed -i "s/DOMAIN_URL/${DOMAIN_URL}/g" "$config"
 	path=$(echo ${WORDPRESS_VOLUME_PATH} | sed 's_/_\\/_g')
 	sed -i "s/WORDPRESS_VOLUME_PATH/${path}/g" "$config"
-	sed -i "s/WORDPRESS_DB_NAME/${WORDPRESS_DB_NAME}/g" "$config"
+	sed -i "s/WORDPRESS_HOST/${WORDPRESS_HOST}/g" "$config"
 	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/g" "$config"
 	mv "$config" /etc/nginx/http.d/
 	check
