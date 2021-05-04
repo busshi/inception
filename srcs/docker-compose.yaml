@@ -65,6 +65,18 @@ services:
     volumes:
       - wp_data:${WORDPRESS_VOLUME_PATH}
     restart: always
+  ftp:
+    build: requirements/bonus/ftp/
+    image: ftp
+    volumes:
+      - ftp_data:${FTP_VOLUME_PATH}
+    ports:
+      - "21:21"
+    environment:
+      - FTP_VOLUME_PATH=${FTP_VOLUME_PATH}
+      - FTP_USER=${FTP_USER}
+      - FTP_PASSWORD=${FTP_PASSWORD}
+    restart: always
   adminer:
     build: requirements/bonus/adminer/
     image: adminer
@@ -87,4 +99,10 @@ volumes:
     driver_opts:
       type: none
       device: ${WORDPRESS_VOLUME_PATH}
+      o: bind
+  ftp_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ${FTP_VOLUME_PATH}
       o: bind

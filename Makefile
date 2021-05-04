@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/03 13:38:25 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/04 09:24:47 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,13 +17,13 @@ CMD			= cd srcs && docker-compose
 all:		build
 
 build:
-			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
+			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH) $(FTP_VOLUME_PATH)
 			@echo "127.0.0.1 $(DOMAIN_URL)" | sudo tee -a /etc/hosts
 			@$(CMD) up --build -d
 			@touch build
 
 verbose:
-			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
+			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH) $(FTP_VOLUME_PATH)
 			@echo "127.0.0.1 $(DOMAIN_URL)" | sudo tee -a /etc/hosts
 			@$(CMD) up --build
 			@touch build
@@ -51,7 +51,7 @@ fclean:		clean
 
 prune:		fclean
 			@docker volume prune --force
-			@sudo rm -rf $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
+			@sudo rm -rf $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH) $(FTP_VOLUME_PATH)
 			@sudo sed -i "s/127.0.0.1 $(DOMAIN_URL)//g" /etc/hosts
 
 rmi:		prune

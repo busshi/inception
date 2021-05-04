@@ -5,19 +5,19 @@
 #                                                     +:+ +:+         +:+      #
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/05/03 14:23:37 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/04 14:30:48 by aldubar          ###   ########.fr        #
+#    Created: 2021/05/04 09:16:47 by aldubar           #+#    #+#              #
+#    Updated: 2021/05/04 15:32:10 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM		alpine:3.13.4
 
-RUN		apk add --no-cache redis
+RUN		apk add vsftpd
 
-COPY		conf/ /home/redis/
+COPY		conf/	/home/ftp
 
-WORKDIR		/home/redis
+WORKDIR		/home/ftp
 
-EXPOSE		6379
+EXPOSE		21
 
 ENTRYPOINT	["sh", "entry_point.sh"]
