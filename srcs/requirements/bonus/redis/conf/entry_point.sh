@@ -26,10 +26,17 @@ if [ $(cat "$file" | grep "maxmemory 256mb" | wc -l) -eq 0 ]; then
 else
 	echo -e "${OK} Redis already configured. Skipping."
 fi
+#apk add make
+#wget http://download.redis.io/redis-stable.tar.gz
+#tar xvzf redis-stable.tar.gz
+#cd redis-stable
+#make
+#make install
+#tail -f
 
 
 echo -e "${orange}[+] Starting redis server...${clear}"
-redis-server --daemonize yes --protected-mode no
+redis-server --daemonize yes --protected-mode no --maxmemory 256mb --maxmemory-policy allkeys-lru
 check
 
 
@@ -43,5 +50,3 @@ echo -e "${OK}"
 
 echo -e "${orange}[+] Starting redis monitor...${clear}"
 redis-cli monitor
-
-

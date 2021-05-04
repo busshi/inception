@@ -51,7 +51,6 @@ services:
       - CERT_PATH=${CERT_PATH}
       - NGINX_CERT=${NGINX_CERT}
       - NGINX_CERT_KEY=${NGINX_CERT_KEY}
-      - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
       - WORDPRESS_HOST=${WORDPRESS_HOST}
       - WORDPRESS_PORT=${WORDPRESS_PORT}
@@ -62,6 +61,8 @@ services:
     image: redis
     depends_on:
       - wordpress
+    ports:
+      - "6379:6379"
     volumes:
       - wp_data:${WORDPRESS_VOLUME_PATH}
     restart: always
@@ -69,13 +70,15 @@ services:
     build: requirements/bonus/ftp/
     image: ftp
     volumes:
-      - ftp_data:${FTP_VOLUME_PATH}
+      - ftp_data:/home/${FTP_USER}
     ports:
       - "21:21"
     environment:
       - FTP_VOLUME_PATH=${FTP_VOLUME_PATH}
       - FTP_USER=${FTP_USER}
       - FTP_PASSWORD=${FTP_PASSWORD}
+      - FTP_CERT=${FTP_CERT}
+      - DOMAIN_URL=${DOMAIN_URL}
     restart: always
   adminer:
     build: requirements/bonus/adminer/

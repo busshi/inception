@@ -22,6 +22,8 @@ if [ -f "$conf" ] ; then
 	sed -i "s/FTP_USER/${FTP_USER}/g" "$conf"
 	path=$(echo ${FTP_VOLUME_PATH} | sed 's_/_\\/_g')
 	sed -i "s/FTP_VOLUME_PATH/${path}/g" "$conf"
+	cert=$(echo ${FTP_CERT} | sed 's_/_\\/_g')
+	sed -i "s/FTP_CERT/${cert}/g" "$conf"
 	mv "$conf" /etc/vsftpd
 	check
 	echo -e "${orange}[+] Adding user {FTP_USER}...${clear}"
@@ -34,8 +36,13 @@ if [ -f "$conf" ] ; then
 		mv "$user" /etc/vsftpd/
 		check
 	fi
-	echo -e "${orange}[+] Creating symlink for default directory...${clear}"
-	ln -s /var/lib/ftp "${FTP_VOLUME_PATH}/${FTP_USER}"
+#	echo -e "${orange}[+] Creating symlink for default directory...${clear}"
+#	mkdir -p "/home/aldubar/data/ftp"
+#	ln -s "/home/${FTP_USER}" "/home/aldubar/data/ftp"
+#	ln -s "${FTP_VOLUME_PATH}/${FTP_USER}" "/home/${FTP_USER}"
+#	check
+	echo -e "${orange}[+] Generating vsftpd self-signed certificat...${clear}"
+	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${DOMAIN_URL}" -newkey rsa:3072 -keyout ${FTP_CERT} -out ${FTP_CERT}
 	check
 else
 	echo "Vsftpd already configured. Skipping."

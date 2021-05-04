@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/04 09:24:47 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/04 22:55:15 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,7 @@ fclean:		clean
 			@$(CMD) down -v
 
 prune:		fclean
-			@docker volume prune --force
+			@docker system prune --volumes --all --force
 			@sudo rm -rf $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH) $(FTP_VOLUME_PATH)
 			@sudo sed -i "s/127.0.0.1 $(DOMAIN_URL)//g" /etc/hosts
 
