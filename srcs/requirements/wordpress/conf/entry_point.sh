@@ -87,13 +87,17 @@ else
 fi
 
 
-echo -e "${orange}[+] Cleaning sample post...${clear}"
-if wp post exists 1 &> /dev/null ; then
-	wp post delete 1 --force
-	check;
-else
-	echo -e "${OK} Post already deleted. Skipping..."
-fi
+echo -e "${orange}[+] Cleaning samples posts...${clear}"
+#for post in 1 2 3; do
+
+for post in 1; do
+	if wp post exists ${post} &> /dev/null ; then
+		wp post delete ${post} --force
+		check;
+	else
+		echo -e "${OK} Post #${post} already deleted. Skipping..."
+	fi
+done
 
 
 echo -e "${orange}[+] Generating some random posts...${clear}"

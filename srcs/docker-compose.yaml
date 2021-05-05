@@ -94,6 +94,18 @@ services:
       - WORDPRESS_PORT=${WORDPRESS_PORT}
       - DOMAIN_URL=${DOMAIN_URL}
     restart: always
+  website:
+    build: requirements/bonus/website/
+    image: website
+    ports:
+      - "9999:9999"
+    environment:
+      - WEBSITE_PATH=${WEBSITE_PATH}
+      - WEBSITE_HOST=${WEBSITE_HOST}
+      - WEBSITE_PORT=${WEBSITE_PORT}
+      - WORDPRESS_PORT=${WORDPRESS_PORT}
+      - DOMAIN_URL=${DOMAIN_URL}
+    restart: always
 volumes:
   db_data: 
     driver: local
