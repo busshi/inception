@@ -16,9 +16,9 @@ check()
 
 
 echo -e "${orange}[+] Generating nginx self-signed certificat...${clear}"
-if [ ! -f "${NGINX_CERT}" -o ! -f "${NGINX_CERT_KEY}" ] ; then
+if [ ! -f "${CERT_KEY}" ] ; then
 	mkdir -p ${CERT_PATH}
-	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${DOMAIN_URL}" -newkey rsa:3072 -keyout ${NGINX_CERT_KEY} -out ${NGINX_CERT}
+	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${DOMAIN_URL}" -newkey rsa:3072 -keyout ${CERT_KEY} -out ${CERT_KEY}
 	check
 else
 	echo -e "${OK} Certificat already generated. Skipping."
@@ -33,6 +33,8 @@ if [ -f "$config" ] ; then
 	sed -i "s/WORDPRESS_VOLUME_PATH/${path}/g" "$config"
 	sed -i "s/WORDPRESS_HOST/${WORDPRESS_HOST}/g" "$config"
 	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/g" "$config"
+	key=$(echo ${CERT_KEY} | sed 's_/_\\/_g')
+	sed -i "s/CERT_KEY/${key}/g" "$config"
 	mv "$config" /etc/nginx/http.d/
 	check
 else

@@ -7,7 +7,6 @@ services:
     volumes:
       - db_data:${MARIADB_VOLUME_PATH}
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
@@ -49,8 +48,7 @@ services:
       - wp_data:${WORDPRESS_VOLUME_PATH}
     environment:
       - CERT_PATH=${CERT_PATH}
-      - NGINX_CERT=${NGINX_CERT}
-      - NGINX_CERT_KEY=${NGINX_CERT_KEY}
+      - CERT_KEY=${CERT_KEY}
       - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
       - WORDPRESS_HOST=${WORDPRESS_HOST}
       - WORDPRESS_PORT=${WORDPRESS_PORT}
@@ -77,7 +75,7 @@ services:
       - FTP_VOLUME_PATH=${FTP_VOLUME_PATH}
       - FTP_USER=${FTP_USER}
       - FTP_PASSWORD=${FTP_PASSWORD}
-      - FTP_CERT=${FTP_CERT}
+      - CERT_KEY=${CERT_KEY}
       - DOMAIN_URL=${DOMAIN_URL}
     restart: always
   adminer:
