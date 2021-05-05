@@ -46,6 +46,7 @@ services:
       - "443:443"
     volumes:
       - wp_data:${WORDPRESS_VOLUME_PATH}
+      - certs_data:${CERT_PATH}
     environment:
       - CERT_PATH=${CERT_PATH}
       - CERT_KEY=${CERT_KEY}
@@ -69,6 +70,7 @@ services:
     image: ftp
     volumes:
       - ftp_data:/home/${FTP_USER}
+      - certs_data:${CERT_PATH}
     ports:
       - "21:21"
     environment:
@@ -87,8 +89,9 @@ services:
       - "4242:4242"
     environment:
       - ADMINER_PATH=${ADMINER_PATH}
-      - ADMINER_PORT=${ADMINER_PORT}
       - ADMINER_HOST=${ADMINER_HOST}
+      - ADMINER_PORT=${ADMINER_PORT}
+      - WORDPRESS_PORT=${WORDPRESS_PORT}
       - DOMAIN_URL=${DOMAIN_URL}
     restart: always
 volumes:
@@ -110,3 +113,5 @@ volumes:
       type: none
       device: ${FTP_VOLUME_PATH}
       o: bind
+  certs_data:
+    driver: local

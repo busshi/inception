@@ -32,7 +32,7 @@ done
 echo -e "${orange}[+] Checking adminer config file www.conf...${clear}"
 file="www.conf"
 if [ -f "$file" ] ; then
-	sed -i "s/ADMINER_PORT/${ADMINER_PORT}/" "$file"
+	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
 	mv "$file" /etc/php7/php-fpm.d/
 	check
 else
@@ -48,6 +48,7 @@ if [ -f "$config" ] ; then
 	sed -i "s/ADMINER_PATH/${path}/g" "$config"
 	sed -i "s/ADMINER_HOST/${ADMINER_HOST}/g" "$config"
 	sed -i "s/ADMINER_PORT/${ADMINER_PORT}/g" "$config"
+	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/g" "$config"
 	mv "$config" /etc/nginx/http.d/
 	check
 else

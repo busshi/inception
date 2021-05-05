@@ -15,7 +15,7 @@ check()
 }
 
 
-echo -e "${orange}[+] Generating nginx self-signed certificat...${clear}"
+echo -e "${orange}[+] Generating self-signed certificat...${clear}"
 if [ ! -f "${CERT_KEY}" ] ; then
 	mkdir -p ${CERT_PATH}
 	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${DOMAIN_URL}" -newkey rsa:3072 -keyout ${CERT_KEY} -out ${CERT_KEY}
