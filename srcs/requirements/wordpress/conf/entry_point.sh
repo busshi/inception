@@ -112,15 +112,36 @@ else
 fi
 
 
-echo -e "${orange}[+] Checking config file www.conf${clear}"
+echo -e "${orange}[+] Removing wordpress hello unused plugin...${clear}"
+if wp plugin is-installed hello ; then
+	wp plugin delete hello
+	check
+else
+	echo -e "${OK} Hello plugin already removed. Skipping."
+fi
+
+
+echo -e "${orange}[+] Removing wordpress askimet unused plugin...${clear}"
+if wp plugin is-installed akismet ; then
+        wp plugin delete akismet
+        check
+else
+        echo -e "${OK} Akismet plugin already removed. Skipping."
+fi
+
+
+echo -e "${orange}[+] Checking wordpress www.conf config file...${clear}"
 file="www.conf"
 if [ -f "$file" ] ; then
 	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
+	echo 'env[REDIS_HOST] = $REDIS_HOST' >> "$file"
+	echo 'env[REDIS_PORT] = $REDIS_PORT' >> "$file"
 	mv "$file" /etc/php7/php-fpm.d/
 	check
 else
-	echo -e "${OK} www.conf already copied. Skipping."
+	echo -e "${OK} Config file www.conf for wordpress already copied. Skipping."
 fi
+
 
 
 keep_alive

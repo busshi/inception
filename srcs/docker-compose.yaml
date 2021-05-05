@@ -84,11 +84,14 @@ services:
     build: requirements/bonus/adminer/
     image: adminer
     depends_on:
-      - wordpress
-    volumes:
-      - wp_data:${WORDPRESS_VOLUME_PATH}
+      - mariadb
+    ports:
+      - "4242:4242"
     environment:
-      - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
+      - ADMINER_PATH=${ADMINER_PATH}
+      - ADMINER_PORT=${ADMINER_PORT}
+      - ADMINER_HOST=${ADMINER_HOST}
+      - DOMAIN_URL=${DOMAIN_URL}
     restart: always
 volumes:
   db_data: 

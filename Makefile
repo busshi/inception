@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/04 22:55:15 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/05 16:14:16 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,17 +14,17 @@ include srcs/.env
 
 CMD			= cd srcs && docker-compose
 
+SCRIPT			= /bin/bash srcs/requirements/tools/make.sh
+
 all:		build
 
 build:
-			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH) $(FTP_VOLUME_PATH)
-			@echo "127.0.0.1 $(DOMAIN_URL)" | sudo tee -a /etc/hosts
+			@$(SCRIPT) build
 			@$(CMD) up --build -d
 			@touch build
 
 verbose:
-			@sudo mkdir -p $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH) $(FTP_VOLUME_PATH)
-			@echo "127.0.0.1 $(DOMAIN_URL)" | sudo tee -a /etc/hosts
+			@$(SCRIPT) build
 			@$(CMD) up --build
 			@touch build
 
@@ -51,15 +51,11 @@ fclean:		clean
 
 prune:		fclean
 			@docker system prune --volumes --all --force
-			@sudo rm -rf $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH) $(FTP_VOLUME_PATH)
-			@sudo sed -i "s/127.0.0.1 $(DOMAIN_URL)//g" /etc/hosts
-
-rmi:		prune
-			@if [ $$(docker image ls -q | wc -l) -ge 1 ]; then docker rmi $$(docker image ls -q) --force; fi
+			@$(SCRIPT) clean
 
 re:		fclean all
 
 help:
 			@echo "Usage: make [build | start | stop | status | restart | logs | clean | fclean | help]"
 
-.PHONY: all, build, up, start, stop, status, restart, logs, clean, fclean, help
+.PHONY: all, build, verbose, start, stop, status, restart, logs, clean, fclean, prune, help
