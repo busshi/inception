@@ -85,6 +85,8 @@ services:
     image: adminer
     depends_on:
       - mariadb
+    volumes:
+      - certs_data:${CERT_PATH}
     ports:
       - "4242:4242"
     environment:
@@ -92,11 +94,14 @@ services:
       - ADMINER_HOST=${ADMINER_HOST}
       - ADMINER_PORT=${ADMINER_PORT}
       - WORDPRESS_PORT=${WORDPRESS_PORT}
+      - CERT_KEY=${CERT_KEY}
       - DOMAIN_URL=${DOMAIN_URL}
     restart: always
   website:
     build: requirements/bonus/website/
     image: website
+    volumes:
+      - certs_data:${CERT_PATH}
     ports:
       - "9999:9999"
     environment:
@@ -105,6 +110,7 @@ services:
       - WEBSITE_PORT=${WEBSITE_PORT}
       - WORDPRESS_PORT=${WORDPRESS_PORT}
       - DOMAIN_URL=${DOMAIN_URL}
+      - CERT_KEY=${CERT_KEY}
     restart: always
 volumes:
   db_data: 
