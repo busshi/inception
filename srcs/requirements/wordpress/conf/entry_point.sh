@@ -62,12 +62,12 @@ if ! wp core is-installed ; then
 	echo -e "${orange}[+] Installing redis-cache plugin...${clear}"
         wp plugin install --activate redis-cache
         check
-#        echo "define( 'WP_CACHE', true );" >> "${WORDPESS_VOLUME_PATH}/wp-config.php"
+        echo "define( 'WP_CACHE', true );" >> "${WORDPESS_VOLUME_PATH}/wp-config.php"
 	echo "define( 'WP_REDIS_HOST', getenv('REDIS_HOST') );" >> "${WORDPRESS_VOLUME_PATH}/wp-config.php"
 	echo "define( 'WP_REDIS_PORT', getenv('REDIS_PORT') );" >> "${WORDPRESS_VOLUME_PATH}/wp-config.php"
-	echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
-	wp redis enable
-	check
+#	echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
+#	wp redis enable
+#	check
 	echo -e "${orange}[+] Aplying a theme...${clear}"
 	wp theme install twentysixteen --activate
 	check
@@ -141,6 +141,19 @@ if [ -f "$file" ] ; then
 else
 	echo -e "${OK} Config file www.conf for wordpress already copied. Skipping."
 fi
+
+
+#echo -e "${orange}[+] Connecting to redis from wordpress...${clear}"
+#ping=0
+#while [[ $ping -eq 0 ]] ; do
+#	[ "$(redis-cli -h {REDIS_HOST} -p {REDIS_PORT} ping 2> /dev/null)" != "PONG" ] && sleep 1 || ping=$(( $ping + 1 ))
+#done
+#echo -e "${OK}"
+
+
+echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
+wp redis enable
+check
 
 
 

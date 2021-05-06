@@ -58,12 +58,13 @@ services:
   redis:
     build: requirements/bonus/redis/
     image: redis
-    depends_on:
-      - wordpress
     ports:
       - "6379:6379"
     volumes:
       - wp_data:${WORDPRESS_VOLUME_PATH}
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
     restart: always
   ftp:
     build: requirements/bonus/ftp/

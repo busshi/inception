@@ -12,7 +12,7 @@
 
 FROM		alpine:3.13.4
 
-RUN		apk add --no-cache nginx php7-fpm php7-mysqli php7-session openssl
+RUN		apk add --no-cache nginx php7-fpm php7-mysqli openssl
 
 WORKDIR		/home/adminer
 
