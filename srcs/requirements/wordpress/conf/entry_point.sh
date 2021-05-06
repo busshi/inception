@@ -8,8 +8,6 @@ clear="\033[0m"
 OK="[ ${green}OK${clear} ]"
 KO="[ ${red}KO${clear} ]"
 
-DIR=${WORDPRESS_VOLUME_PATH}
-
 
 
 keep_alive()
@@ -49,7 +47,7 @@ done
 
 
 echo -e "${orange}[+] Configuring wordpress...${clear}"
-if [ ! -f "${DIR}/wp-config.php" ] ; then
+if [ ! -f "${WORDPRESS_VOLUME_PATH}/wp-config.php" ] ; then
 	wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${WORDPRESS_DB_HOST}
 	check
 else
@@ -64,9 +62,9 @@ if ! wp core is-installed ; then
 	echo -e "${orange}[+] Installing redis-cache plugin...${clear}"
         wp plugin install --activate redis-cache
         check
-        echo "define( 'WP_CACHE', true );" >> "${DIR}/wp-config.php"
-	echo "define( 'WP_REDIS_HOST', getenv('REDIS_HOST') );" >> "${DIR}/wp-config.php"
-	echo "define( 'WP_REDIS_PORT', getenv('REDIS_PORT') );" >> "${DIR}/wp-config.php"
+#        echo "define( 'WP_CACHE', true );" >> "${WORDPESS_VOLUME_PATH}/wp-config.php"
+	echo "define( 'WP_REDIS_HOST', getenv('REDIS_HOST') );" >> "${WORDPRESS_VOLUME_PATH}/wp-config.php"
+	echo "define( 'WP_REDIS_PORT', getenv('REDIS_PORT') );" >> "${WORDPRESS_VOLUME_PATH}/wp-config.php"
 	echo -e "${orange}[+] Enabling redis-cache plugin...${clear}"
 	wp redis enable
 	check
@@ -88,9 +86,7 @@ fi
 
 
 echo -e "${orange}[+] Cleaning samples posts...${clear}"
-#for post in 1 2 3; do
-
-for post in 1; do
+for post in 1 2 3; do
 	if wp post exists ${post} &> /dev/null ; then
 		wp post delete ${post} --force
 		check;

@@ -13,7 +13,7 @@
 FROM		alpine:3.13.4
 
 RUN		apk add --no-cache php7 php7-fpm php7-phar php7-json php7-curl \
-		php7-mysqli mariadb-client php7-iconv php7-redis
+		php7-mysqli mariadb-client php7-iconv
 
 RUN		mkdir -p /home/aldubar/data/wordpress && cd /home/aldubar/data/wordpress && \
 		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
