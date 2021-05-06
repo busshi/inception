@@ -59,7 +59,7 @@ fi
 
 
 echo -e "${orange}[+] Generating self-signed certificat...${clear}"
-if [ ! -f "${CERT_KEY}" ] ; then
+if [ ! -f "$CERT_KEY" ] ; then
 	openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=FRANCE/L=Paris/O=42fr/OU=42fr/CN=${DOMAIN_URL}" -newkey rsa:3072 -keyout ${CERT_KEY} -out ${CERT_KEY}
 	check
 else
