@@ -79,7 +79,6 @@ services:
       - FTP_USER=${FTP_USER}
       - FTP_PASSWORD=${FTP_PASSWORD}
       - CERT_KEY=${CERT_KEY}
-      - DOMAIN_URL=${DOMAIN_URL}
     restart: always
   adminer:
     build: requirements/bonus/adminer/

@@ -6,13 +6,13 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/03 22:08:18 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/05 23:36:35 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/07 09:45:09 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FROM		alpine:3.13.4
 
-RUN		apk add --no-cache nginx php7-fpm php7-mysqli php7-session openssl
+RUN		apk add --no-cache nginx php7-fpm php7-mysqli php7-session
 
 WORKDIR		/home/adminer
 
