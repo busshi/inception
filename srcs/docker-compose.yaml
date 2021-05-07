@@ -17,8 +17,6 @@ services:
     image: wordpress
     depends_on:
       - mariadb
-    ports:
-      - "8000:80"
     volumes:
       - wp_data:${WORDPRESS_VOLUME_PATH}
     environment:
@@ -58,8 +56,6 @@ services:
   redis:
     build: requirements/bonus/redis/
     image: redis
-    ports:
-      - "6379:6379"
     volumes:
       - wp_data:${WORDPRESS_VOLUME_PATH}
     environment:

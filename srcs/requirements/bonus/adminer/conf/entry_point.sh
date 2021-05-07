@@ -16,17 +16,6 @@ check()
 
 
 
-echo -e "${orange}[+] Copying adminer files...${clear}"
-for file in "index.php" "adminer.css" ; do
-	if [ -f "$file" ] ; then
-		mv "$file" "${ADMINER_PATH}/"
-		check
-	else
-		echo -e "${OK} File ${file} for adminer already copied. Skipping."
-	fi
-done
-
-
 echo -e "${orange}[+] Checking adminer config file www.conf...${clear}"
 file="www.conf"
 if [ -f "$file" ] ; then

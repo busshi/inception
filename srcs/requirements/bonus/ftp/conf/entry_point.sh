@@ -31,7 +31,7 @@ if [ -f "$conf" ] ; then
 	check
 	user="vsftpd.user_list"
 	if [ -f "$user" ] ; then
-		echo -e "${orange} Authorizing user ${FTP_USER}...${clear}"
+		echo -e "${orange}[+] Authorizing user ${FTP_USER}...${clear}"
 		sed -i "s/FTP_USER/${FTP_USER}/g" "$user"
 		mv "$user" /etc/vsftpd/
 		check
