@@ -18,13 +18,9 @@ check()
 
 echo -e "${orange}[+] Checking adminer config file www.conf...${clear}"
 file="www.conf"
-if [ -f "$file" ] ; then
-	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
-	mv "$file" /etc/php7/php-fpm.d/
-	check
-else
-	echo -e "${OK} www.conf for adminer already copied. Skipping."
-fi
+sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
+cp "$file" /etc/php7/php-fpm.d/
+check
 
 
 echo -e "${orange}[+] Copying nginx-adminer configuration file...${clear}"

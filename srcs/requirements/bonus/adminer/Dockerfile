@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/03 22:08:18 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/07 09:45:09 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/07 17:39:10 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,9 @@ RUN		wget -O index.php https://github.com/vrana/adminer/releases/download/v4.8.0
 
 RUN		mkdir -p /run/nginx && chown nginx:nginx /run/nginx
 
-COPY		conf/ /home/adminer
+COPY		conf/ /entrypoint
+
+WORKDIR		/entrypoint
 
 EXPOSE		4242
 

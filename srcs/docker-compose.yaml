@@ -5,12 +5,12 @@ services:
     build: requirements/mariadb/
     image: mariadb
     volumes:
-      - db_data:${MARIADB_VOLUME_PATH}
+      - db_data:${MARIADB_PATH}
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
-      - MARIADB_VOLUME_PATH=${MARIADB_VOLUME_PATH}
+      - MARIADB_PATH=${MARIADB_PATH}
     restart: always
   wordpress:
     build: requirements/wordpress/
@@ -18,7 +18,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - wp_data:${WORDPRESS_VOLUME_PATH}
+      - wp_data:${WORDPRESS_PATH}
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
@@ -29,7 +29,7 @@ services:
       - WORDPRESS_DB_USER=${WORDPRESS_DB_USER}
       - WORDPRESS_DB_USER_PASSWORD=${WORDPRESS_DB_USER_PASSWORD}
       - WORDPRESS_DB_NAME=${WORDPRESS_DB_NAME}
-      - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
+      - WORDPRESS_PATH=${WORDPRESS_PATH}
       - DOMAIN_URL=${DOMAIN_URL}
       - WORDPRESS_PORT=${WORDPRESS_PORT}
       - REDIS_HOST=${REDIS_HOST}
@@ -43,12 +43,12 @@ services:
     ports:
       - "443:443"
     volumes:
-      - wp_data:${WORDPRESS_VOLUME_PATH}
+      - wp_data:${WORDPRESS_PATH}
       - certs_data:${CERT_PATH}
     environment:
       - CERT_PATH=${CERT_PATH}
       - CERT_KEY=${CERT_KEY}
-      - WORDPRESS_VOLUME_PATH=${WORDPRESS_VOLUME_PATH}
+      - WORDPRESS_PATH=${WORDPRESS_PATH}
       - WORDPRESS_HOST=${WORDPRESS_HOST}
       - WORDPRESS_PORT=${WORDPRESS_PORT}
       - DOMAIN_URL=${DOMAIN_URL}
@@ -56,8 +56,6 @@ services:
   redis:
     build: requirements/bonus/redis/
     image: redis
-    volumes:
-      - wp_data:${WORDPRESS_VOLUME_PATH}
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
@@ -65,13 +63,15 @@ services:
   ftp:
     build: requirements/bonus/ftp/
     image: ftp
+    depends_on:
+      - wordpress
     volumes:
-      - ftp_data:/home/${FTP_USER}
+      - wp_data:${FTP_PATH}
       - certs_data:${CERT_PATH}
     ports:
       - "21:21"
     environment:
-      - FTP_VOLUME_PATH=${FTP_VOLUME_PATH}
+      - WORDPRESS_PATH=${WORDPRESS_PATH}
       - FTP_USER=${FTP_USER}
       - FTP_PASSWORD=${FTP_PASSWORD}
       - CERT_KEY=${CERT_KEY}
@@ -120,12 +120,6 @@ volumes:
     driver_opts:
       type: none
       device: ${WORDPRESS_VOLUME_PATH}
-      o: bind
-  ftp_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: ${FTP_VOLUME_PATH}
       o: bind
   certs_data:
     driver: local

@@ -18,13 +18,9 @@ check()
 
 echo -e "${orange}[+] Checking website config file www.conf...${clear}"
 file="www.conf"
-if [ -f "$file" ] ; then
-	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
-	mv "$file" /etc/php7/php-fpm.d/
-	check
-else
-	echo -e "${OK} Website file www.conf already copied. Skipping."
-fi
+sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
+cp "$file" /etc/php7/php-fpm.d/
+check
 
 
 echo -e "${orange}[+] Copying nginx-website configuration file...${clear}"

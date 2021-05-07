@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/05 16:14:16 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/08 01:00:35 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,17 +16,13 @@ CMD			= cd srcs && docker-compose
 
 SCRIPT			= /bin/bash srcs/requirements/tools/make.sh
 
-all:		build
-
-build:
+all:
 			@$(SCRIPT) build
 			@$(CMD) up --build -d
-			@touch build
 
 verbose:
 			@$(SCRIPT) build
 			@$(CMD) up --build
-			@touch build
 
 start:
 			@$(CMD) start
@@ -39,23 +35,20 @@ status:
 
 restart:	stop start
 
-logs:
+log:
 			@$(CMD) logs --tail=100 -f
 
 clean:
 			@$(CMD) down
-			@rm -f build
 
 fclean:		clean
 			@$(CMD) down -v
-
-prune:		fclean
 			@docker system prune --volumes --all --force
 			@$(SCRIPT) clean
 
 re:		fclean all
 
 help:
-			@echo "Usage: make [build | start | stop | status | restart | logs | clean | fclean | help]"
+			@echo "Usage: make [verbose | start | stop | status | restart | log | clean | fclean | re | help]"
 
-.PHONY: all, build, verbose, start, stop, status, restart, logs, clean, fclean, prune, help
+.PHONY: all, verbose, start, stop, status, restart, log, clean, fclean, re, help

@@ -33,8 +33,14 @@ check()
 }
 
 
+cd ${WORDPRESS_PATH}
 
-sleep 5
+if [ ! -f "wp-config.php" ] ; then
+	echo -e "${orange}[+] Downloading wordpress...${clear}"
+	wp core download --locale=fr_FR 2> /dev/null
+fi
+
+#sleep 20
 
 echo -e "${orange}[+] Connecting to mariadb from wordpress...${clear}"
 connected=0
@@ -47,7 +53,7 @@ done
 
 
 echo -e "${orange}[+] Configuring wordpress...${clear}"
-if [ ! -f "${WORDPRESS_VOLUME_PATH}/wp-config.php" ] ; then
+if [ ! -f "wp-config.php" ] ; then
 	wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} --dbpass=${MYSQL_PASSWORD} --dbhost=${WORDPRESS_DB_HOST}
 	check
 else
@@ -62,7 +68,7 @@ if ! wp core is-installed ; then
 	echo -e "${orange}[+] Installing redis-cache plugin...${clear}"
         wp plugin install --activate redis-cache
         check
-	cat redis.php wp-config.php > wpconf_tmp
+	cat /entrypoint/redis.php wp-config.php > wpconf_tmp
 	cat wpconf_tmp > wp-config.php
 	rm -rf wpconf_tmp
 	echo -e "${orange}[+] Aplying a theme...${clear}"
@@ -128,16 +134,12 @@ fi
 
 
 echo -e "${orange}[+] Checking wordpress www.conf config file...${clear}"
-file="www.conf"
-if [ -f "$file" ] ; then
-	sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
-	echo 'env[REDIS_HOST] = $REDIS_HOST' >> "$file"
-	echo 'env[REDIS_PORT] = $REDIS_PORT' >> "$file"
-	mv "$file" /etc/php7/php-fpm.d/
-	check
-else
-	echo -e "${OK} Config file www.conf for wordpress already copied. Skipping."
-fi
+file="/entrypoint/www.conf"
+sed -i "s/WORDPRESS_PORT/${WORDPRESS_PORT}/" "$file"
+echo 'env[REDIS_HOST] = $REDIS_HOST' >> "$file"
+echo 'env[REDIS_PORT] = $REDIS_PORT' >> "$file"
+cp "$file" /etc/php7/php-fpm.d/
+check
 
 
 echo -e "${orange}[+] Connecting to redis from wordpress...${clear}"
