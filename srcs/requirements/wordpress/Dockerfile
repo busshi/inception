@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/07 20:05:39 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/08 16:26:56 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,5 @@ RUN		wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.p
 COPY		conf/ /entrypoint/
 
 WORKDIR		/entrypoint
-
-EXPOSE		9000
 
 ENTRYPOINT	["sh", "entry_point.sh"]

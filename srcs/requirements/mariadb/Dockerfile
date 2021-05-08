@@ -6,7 +6,7 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 15:58:47 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/08 00:44:48 by aldubar          ###   ########.fr        #
+#    Updated: 2021/05/08 16:26:44 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,5 @@ RUN		mkdir -p /run/mysqld && chown -R mysql:mysql /run/mysqld && \
 
 
 WORKDIR		/entrypoint
-
-EXPOSE		3306
 
 ENTRYPOINT ["sh", "entry_point.sh"]
