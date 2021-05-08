@@ -4,6 +4,7 @@ services:
   mariadb:
     build: requirements/mariadb/
     image: mariadb
+    container_name: mariadb
     volumes:
       - db_data:${MARIADB_PATH}
     environment:
@@ -15,6 +16,7 @@ services:
   wordpress:
     build: requirements/wordpress/
     image: wordpress
+    container_name: wordpress
     depends_on:
       - mariadb
     volumes:
@@ -38,6 +40,7 @@ services:
   nginx:
     build: requirements/nginx/
     image: nginx
+    container_name: nginx
     depends_on:
       - wordpress
     ports:
@@ -56,6 +59,7 @@ services:
   redis:
     build: requirements/bonus/redis/
     image: redis
+    container_name: redis
     environment:
       - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
@@ -63,6 +67,7 @@ services:
   ftp:
     build: requirements/bonus/ftp/
     image: ftp
+    container_name: ftp
     depends_on:
       - wordpress
     volumes:
@@ -79,6 +84,7 @@ services:
   adminer:
     build: requirements/bonus/adminer/
     image: adminer
+    container_name: adminer
     depends_on:
       - mariadb
     volumes:
@@ -96,6 +102,7 @@ services:
   website:
     build: requirements/bonus/website/
     image: website
+    container_name: website
     volumes:
       - certs_data:${CERT_PATH}
     ports:
