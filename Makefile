@@ -6,11 +6,9 @@
 #    By: aldubar <aldubar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/29 13:58:41 by aldubar           #+#    #+#              #
-#    Updated: 2021/05/08 01:00:35 by aldubar          ###   ########.fr        #
+#    Updated: 2021/06/03 14:58:22 by aldubar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-include srcs/.env
 
 CMD			= cd srcs && docker-compose
 
